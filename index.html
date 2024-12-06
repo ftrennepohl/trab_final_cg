@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
+		<title>Cena</title>
 		<style>
 			body { margin: 0; }
 		</style>
@@ -13,7 +13,6 @@
 			import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
 			import { GLTFLoader } from 'https://unpkg.com/three@0.126.1/examples/jsm/loaders/GLTFLoader.js';
 	
-			// Scene, Camera, Renderer
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 			const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -21,7 +20,6 @@
 			renderer.setPixelRatio(window.devicePixelRatio);
 			document.body.appendChild(renderer.domElement);
 	
-			// Lighting
 			const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
 			scene.add(ambientLight);
 	
@@ -29,17 +27,13 @@
 			directionalLight.position.set(10, 10, 5);
 			scene.add(directionalLight);
 	
-			// Controls
 			const controls = new OrbitControls(camera, renderer.domElement);
 			camera.position.set(0, 200, 15);
 			controls.update();
 	
-			// Animation Variables
 			const clock = new THREE.Clock();
 			const mixers = [];
-			// Load GLTF Model
 			const loader = new GLTFLoader();
-			//const modelPath = 'assets/recomeco.glb';
 			
 			const models = [];
 			
@@ -54,7 +48,6 @@
 						if(modelPath != 'assets/recomeco.glb') models.push({ model, direction: new THREE.Vector3(0, 0, 0.2)}); // Adiciona direção de movimento
             			console.log(`Modelo ${modelPath} carregado.`, gltf.animations);
 						console.log(gltf.animations)
-						// Set up animations if available
 						if (gltf.animations && gltf.animations.length > 0) {
 							let mixer = new THREE.AnimationMixer(model);
 							gltf.animations.forEach((clip) => {
@@ -93,14 +86,12 @@
 			loadModel('assets/fish.glb', { x: -110, y: 5, z: 0 })
 			loadModel('assets/shark.glb', { x: 120, y: 18, z: 20 })
 	
-			// Resize Handling
 			window.addEventListener('resize', () => {
 				renderer.setSize(window.innerWidth, window.innerHeight);
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 			});
 	
-			// Animation Loop
 			function animate() {
 				const delta = clock.getDelta();
 	
@@ -109,13 +100,11 @@
 				models.forEach((entry, index) => {
 				const { model, direction} = entry;
 
-					// Atualiza posição com base na direção
 					model.position.add(direction);
-
-					// Inverte direção ao atingir limites
-					//if (model.position.x > 20 || model.position.x < -20) direction.x *= -1; // Ajuste para peixe e tubarão
+					
+					// Movimentação peixes e tubarão
 					if (model.position.z > 120 || model.position.z < -120){
-						direction.z *= -1; // Limites ajustados para ambos
+						direction.z *= -1; 
 						model.rotation.y += Math.PI;
 					}
 					
